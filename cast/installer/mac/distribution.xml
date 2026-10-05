@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+                        Codegen Annotated Source of Truth
+————————————————————————————————————————————————————————————————————————————————
+
+            ░░████████████░░████████████░░████████████░░████████████
+            ░░████  ░░████░░████  ░░████░░████  ░░████    ░░████
+            ░░████        ░░████  ░░████░░████            ░░████
+            ░░████        ░░████████████░░████████████    ░░████
+            ░░████        ░░████  ░░████        ░░████    ░░████
+            ░░████  ░░████░░████  ░░████░░████  ░░████    ░░████
+            ░░████████████░░████  ░░████░░████████████    ░░████
+
+————————————————————————————————————————————————————————————————————————————————
+                         FOR YOUR EYES ONLY, DO NOT EDIT
+-->
+<installer-gui-script minSpecVersion="2">
+    <title>stamp</title>
+    <background file="background.png" mime-type="image/png" alignment="bottomleft" scaling="proportional"/>
+    <background-darkAqua file="background-dark.png" mime-type="image/png" alignment="bottomleft" scaling="proportional"/>
+    <domains enable_anywhere="false" enable_currentUserHome="false" enable_localSystem="true"/>
+    <options customize="never" require-scripts="false" hostArchitectures="@CAST_HOST_ARCHITECTURES@"/>
+    <volume-check>
+        <allowed-os-versions>
+            <os-version min="11.0"/>
+        </allowed-os-versions>
+    </volume-check>
+    <choices-outline>
+        <line choice="com.jrengmusic.stamp"/>
+    </choices-outline>
+    <choice id="com.jrengmusic.stamp" title="stamp" start_selected="true">
+        <pkg-ref id="com.jrengmusic.stamp"/>
+    </choice>
+    <pkg-ref id="com.jrengmusic.stamp" version="0.1.0" onConclusion="none">stamp.pkg</pkg-ref>
+</installer-gui-script>
