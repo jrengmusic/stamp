@@ -14,22 +14,19 @@ static bool writeDocument (const juce::File& inputFile, const juce::File& output
 {
     static constexpr bool gpuDisabled { false };
     const juce::File noCacheFile;
-    const juce::Identifier stateType { "MODE" };
 
     jam::VulkanEngine::getOrCreate (
         jam::VulkanEngine::getPrimaryDisplayExtent(), ProjectInfo::projectName, jam::VulkanEngine::getFrameBudget(), noCacheFile, gpuDisabled);
 
-    const auto markdown { jam::MarkdownDocument::parse (inputFile.loadFileAsString(), inputFile.getFullPathName()) };
     jam::SharedInstance<jam::SharedDocuments> documents { std::in_place };
     jam::StyleManager styleManager { { BinaryData::fetcher } };
-    styleManager.registerStyle (files::whelmedStyleSheet);
+    styleManager.registerStyle (files::markdownStyleSheet);
     styleManager.registerStyle (files::mermaidStyleSheet);
-    jam::StyleWhelmed styleWhelmed { styleManager };
-    jam::StyleMermaid styleMermaid { styleManager, Id::light };
-    juce::LookAndFeel::setDefaultLookAndFeel (&styleWhelmed);
+    jam::StyleMarkdown styleMarkdown;
+    juce::LookAndFeel::setDefaultLookAndFeel (&styleMarkdown);
 
-    jam::WhelmedDocument whelmed { markdown };
-    jam::WhelmedComponent component { whelmed, styleMermaid, juce::ValueTree { stateType } };
+    jam::MarkdownComponent component;
+    component.setDocument (jam::MarkdownDocument::parse (inputFile.loadFileAsString(), inputFile.getFullPathName()));
 
     return component.saveToFile (outputFile, map::pageWidths[page], map::pageHeights[page], map::pageMargins[page]);
 }

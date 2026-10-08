@@ -178,20 +178,20 @@ endif()
 
 message(STATUS "CAST: JUCE ${CAST_FOUND_JUCE_VERSION} patched at ${CAST_JUCE_PATH}")
 
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_core")           # JAM Core
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_freetype")       # Vendored FreeType font rasterization library
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_graphics")       # Graphics utilities, blur, shadows, colours, fonts, mesh
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_pdf")            # Clean-room PDF document model, writer and graphics context
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_data_structures")# ValueTree management and data model utilities — model, parameters, JSON conversion
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_animation")      # Foundation animation classes (Animator, AnimationBase, AnimationScrollingText)
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_vulkan")         # Vulkan rendering backend
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_web")            # HTML authored-subset and CSS Syntax Level 3 subset tokenizers and parsers
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_style")          # JAM Style — LookAndFeel base + ColourScheme-backed colour registry
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_gui")            # GUI foundation — Window, Modal, Glass
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_document")       # Universal line break and reflow (UAX #14)
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_markdown")       # Clean-room native CommonMark + GFM markdown parsing and rendering
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_mermaid_diagram")# Clean-room native mermaid diagram parsing over jam::Document producing the semantic Element tree
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_whelmed")        # Markdown/mermaid document viewer component and its LookAndFeel
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_core")             # JAM Core
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_freetype")         # Vendored FreeType font rasterization library
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_graphics")         # Graphics utilities, blur, shadows, colours, fonts, mesh
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_pdf")              # Clean-room PDF document model, writer and graphics context
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_data_structures")  # ValueTree management and data model utilities — model, parameters, JSON conversion
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_animation")        # Foundation animation classes (Animator, AnimationBase, AnimationScrollingText)
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_vulkan")           # Vulkan rendering backend
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_web")              # HTML authored-subset and CSS Syntax Level 3 subset tokenizers and parsers
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_style")            # JAM Style — LookAndFeel base + ColourScheme-backed colour registry
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_gui")              # GUI foundation — Window, Modal, Glass
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_document")         # Universal line break and reflow (UAX #14)
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_markdown")         # Clean-room native CommonMark + GFM markdown parsing and rendering
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_mermaid_diagram")  # Clean-room native mermaid diagram parsing over jam::Document producing the semantic Element tree
+juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_markdown_graphics")# Markdown and mermaid materialisation, layout and view component
 
 message(STATUS "CAST: user modules added from ${CAST_USER_MODULE_PATH}")
 
@@ -271,7 +271,7 @@ jam_gui
 jam_document
 jam_markdown
 jam_mermaid_diagram
-jam_whelmed
+jam_markdown_graphics
     PUBLIC
         juce::juce_recommended_config_flags
 )
@@ -372,7 +372,7 @@ endif()
 file(GLOB CAST_BINARY_FILES CONFIGURE_DEPENDS
 Source/HELP.md
 ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/mermaid.css
-${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/whelmed.css
+${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/markdown.css
 ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayBook.ttf
 ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayBold.ttf
 ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayMonoBook.ttf

@@ -1,5 +1,18 @@
 # SPRINT-LOG
 
+## Sprint 4: MarkdownComponent Replaces Whelmed ✅
+
+**Date:** 2026-10-08
+**Duration:** part of one session (jam Sprint 153 is the primary record)
+
+### Files Modified
+- `Source/Main.cpp` — registers the markdown and mermaid style sheets; `jam::StyleMarkdown` as the default LookAndFeel; `jam::MarkdownComponent::setDocument`, `saveToFile`.
+- `project-info.md` — `@markdown-style` (`markdown.css`), user module `jam_markdown_graphics`, binary `markdownStyleSheet`; font descriptions.
+
+### State for Continuation
+- Builds: `--debug` and `--no-sign` 0/0.
+- `stamp eve/markdown/markdown.md out.pdf` writes 50 pages; ARCHITECT validates against Obsidian.
+
 ## Sprint 3: Release Lane — macOS pkg, Windows NSIS (x64, arm64), gh Upload ✅
 
 **Date:** 2026-10-05

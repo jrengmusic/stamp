@@ -12,7 +12,7 @@
 | @source            | ${CMAKE_CURRENT_SOURCE_DIR}/Source                                     |
 | @mermaid-style     | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/mermaid.css               |
 | @generated         | ${CMAKE_CURRENT_SOURCE_DIR}/Source/generated                           |
-| @whelmed-style     | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/whelmed.css               |
+| @markdown-style    | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/markdown.css              |
 | @display-book      | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayBook.ttf     |
 | @display-bold      | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayBold.ttf     |
 | @display-mono-book | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayMonoBook.ttf |
@@ -151,24 +151,24 @@ Each row is a page name that the command line accepts. The key indexes the width
 
 ## user module
 
-+--------------+---------------------+--------------------------------------------------------------------------------------------------+
-| root         | name                | description                                                                                      |
-+==============+=====================+==================================================================================================+
-| @user-module | jam_core            | JAM Core                                                                                         |
-| @user-module | jam_freetype        | Vendored FreeType font rasterization library                                                     |
-| @user-module | jam_graphics        | Graphics utilities, blur, shadows, colours, fonts, mesh                                          |
-| @user-module | jam_pdf             | Clean-room PDF document model, writer and graphics context                                       |
-| @user-module | jam_data_structures | ValueTree management and data model utilities — model, parameters, JSON conversion               |
-| @user-module | jam_animation       | Foundation animation classes (Animator, AnimationBase, AnimationScrollingText)                   |
-| @user-module | jam_vulkan          | Vulkan rendering backend                                                                         |
-| @user-module | jam_web             | HTML authored-subset and CSS Syntax Level 3 subset tokenizers and parsers                        |
-| @user-module | jam_style           | JAM Style — LookAndFeel base + ColourScheme-backed colour registry                               |
-| @user-module | jam_gui             | GUI foundation — Window, Modal, Glass                                                            |
-| @user-module | jam_document        | Universal line break and reflow (UAX #14)                                                        |
-| @user-module | jam_markdown        | Clean-room native CommonMark + GFM markdown parsing and rendering                                |
-| @user-module | jam_mermaid_diagram | Clean-room native mermaid diagram parsing over jam::Document producing the semantic Element tree |
-| @user-module | jam_whelmed         | Markdown/mermaid document viewer component and its LookAndFeel                                   |
-+--------------+---------------------+--------------------------------------------------------------------------------------------------+
++--------------+-----------------------+--------------------------------------------------------------------------------------------------+
+| root         | name                  | description                                                                                      |
++==============+=======================+==================================================================================================+
+| @user-module | jam_core              | JAM Core                                                                                         |
+| @user-module | jam_freetype          | Vendored FreeType font rasterization library                                                     |
+| @user-module | jam_graphics          | Graphics utilities, blur, shadows, colours, fonts, mesh                                          |
+| @user-module | jam_pdf               | Clean-room PDF document model, writer and graphics context                                       |
+| @user-module | jam_data_structures   | ValueTree management and data model utilities — model, parameters, JSON conversion               |
+| @user-module | jam_animation         | Foundation animation classes (Animator, AnimationBase, AnimationScrollingText)                   |
+| @user-module | jam_vulkan            | Vulkan rendering backend                                                                         |
+| @user-module | jam_web               | HTML authored-subset and CSS Syntax Level 3 subset tokenizers and parsers                        |
+| @user-module | jam_style             | JAM Style — LookAndFeel base + ColourScheme-backed colour registry                               |
+| @user-module | jam_gui               | GUI foundation — Window, Modal, Glass                                                            |
+| @user-module | jam_document          | Universal line break and reflow (UAX #14)                                                        |
+| @user-module | jam_markdown          | Clean-room native CommonMark + GFM markdown parsing and rendering                                |
+| @user-module | jam_mermaid_diagram   | Clean-room native mermaid diagram parsing over jam::Document producing the semantic Element tree |
+| @user-module | jam_markdown_graphics | Markdown and mermaid materialisation, layout and view component                                  |
++--------------+-----------------------+--------------------------------------------------------------------------------------------------+
 
 ## source glob
 
@@ -215,17 +215,17 @@ Each row is a page name that the command line accepts. The key indexes the width
 
 ## binary
 
-+-------------------+--------------------+------------------------------------------------+
-| name              | value              | description                                    |
-+===================+====================+================================================+
-| help              | Source/HELP.md     | Help document source                           |
-| mermaidStyleSheet | @mermaid-style     | Mermaid stylesheet, embedded as BinaryData     |
-| whelmedStyleSheet | @whelmed-style     | Whelmed stylesheet, embedded as BinaryData     |
-| displayBook       | @display-book      | Whelmed body font, embedded as BinaryData      |
-| displayBold       | @display-bold      | Whelmed bold font, embedded as BinaryData      |
-| displayMonoBook   | @display-mono-book | Whelmed mono font, embedded as BinaryData      |
-| displayMonoBold   | @display-mono-bold | Whelmed mono bold font, embedded as BinaryData |
-+-------------------+--------------------+------------------------------------------------+
++--------------------+--------------------+-------------------------------------------------+
+| name               | value              | description                                     |
++====================+====================+=================================================+
+| help               | Source/HELP.md     | Help document source                            |
+| mermaidStyleSheet  | @mermaid-style     | Mermaid stylesheet, embedded as BinaryData      |
+| markdownStyleSheet | @markdown-style    | Markdown stylesheet, embedded as BinaryData     |
+| displayBook        | @display-book      | Markdown body font, embedded as BinaryData      |
+| displayBold        | @display-bold      | Markdown bold font, embedded as BinaryData      |
+| displayMonoBook    | @display-mono-book | Markdown mono font, embedded as BinaryData      |
+| displayMonoBold    | @display-mono-bold | Markdown mono bold font, embedded as BinaryData |
++--------------------+--------------------+-------------------------------------------------+
 
 ## toolchain
 
