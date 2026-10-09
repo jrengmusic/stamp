@@ -2,22 +2,24 @@
 
 ## index
 
-+--------------------+------------------------------------------------------------------------+
-| alias              | symbol                                                                 |
-+====================+========================================================================+
-| @char              | const char* const                                                      |
-| @juce-path         | ${CMAKE_CURRENT_SOURCE_DIR}/../../JUCE                                 |
-| @user-module       | ${CMAKE_CURRENT_SOURCE_DIR}/../jam                                     |
-| @patch             | ${CAST_USER_MODULE_PATH}/patch                                         |
-| @source            | ${CMAKE_CURRENT_SOURCE_DIR}/Source                                     |
-| @mermaid-style     | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/mermaid.css               |
-| @generated         | ${CMAKE_CURRENT_SOURCE_DIR}/Source/generated                           |
-| @markdown-style    | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/markdown.css              |
-| @display-book      | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayBook.ttf     |
-| @display-bold      | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayBold.ttf     |
-| @display-mono-book | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayMonoBook.ttf |
-| @display-mono-bold | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayMonoBold.ttf |
-+--------------------+------------------------------------------------------------------------+
++--------------------+-------------------------------------------------------------------------------+
+| alias              | symbol                                                                        |
++====================+===============================================================================+
+| @char              | const char* const                                                             |
+| @juce-path         | ${CMAKE_CURRENT_SOURCE_DIR}/../../JUCE                                        |
+| @user-module       | ${CMAKE_CURRENT_SOURCE_DIR}/../jam                                            |
+| @patch             | ${CAST_USER_MODULE_PATH}/patch                                                |
+| @source            | ${CMAKE_CURRENT_SOURCE_DIR}/Source                                            |
+| @mermaid-style     | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/mermaid.css                      |
+| @generated         | ${CMAKE_CURRENT_SOURCE_DIR}/Source/generated                                  |
+| @markdown-style    | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/markdown.css                     |
+| @display-book      | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayBook.ttf            |
+| @display-bold      | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayBold.ttf            |
+| @display-mono-book | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayMonoBook.ttf        |
+| @display-mono-bold | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayMonoBold.ttf        |
+| @serif-regular     | ${CMAKE_CURRENT_SOURCE_DIR}/../eve/Source/fonts/Merriweather_24pt-Regular.ttf |
+| @serif-bold        | ${CMAKE_CURRENT_SOURCE_DIR}/../eve/Source/fonts/Merriweather_24pt-Bold.ttf    |
++--------------------+-------------------------------------------------------------------------------+
 
 ## project info
 
@@ -215,17 +217,19 @@ Each row is a page name that the command line accepts. The key indexes the width
 
 ## binary
 
-+--------------------+--------------------+-------------------------------------------------+
-| name               | value              | description                                     |
-+====================+====================+=================================================+
-| help               | Source/HELP.md     | Help document source                            |
-| mermaidStyleSheet  | @mermaid-style     | Mermaid stylesheet, embedded as BinaryData      |
-| markdownStyleSheet | @markdown-style    | Markdown stylesheet, embedded as BinaryData     |
-| displayBook        | @display-book      | Markdown body font, embedded as BinaryData      |
-| displayBold        | @display-bold      | Markdown bold font, embedded as BinaryData      |
-| displayMonoBook    | @display-mono-book | Markdown mono font, embedded as BinaryData      |
-| displayMonoBold    | @display-mono-bold | Markdown mono bold font, embedded as BinaryData |
-+--------------------+--------------------+-------------------------------------------------+
++--------------------+--------------------+--------------------------------------------------+
+| name               | value              | description                                      |
++====================+====================+==================================================+
+| help               | Source/HELP.md     | Help document source                             |
+| mermaidStyleSheet  | @mermaid-style     | Mermaid stylesheet, embedded as BinaryData       |
+| markdownStyleSheet | @markdown-style    | Markdown stylesheet, embedded as BinaryData      |
+| displayBook        | @display-book      | Markdown body font, embedded as BinaryData       |
+| displayBold        | @display-bold      | Markdown bold font, embedded as BinaryData       |
+| displayMonoBook    | @display-mono-book | Markdown mono font, embedded as BinaryData       |
+| displayMonoBold    | @display-mono-bold | Markdown mono bold font, embedded as BinaryData  |
+| serifRegular       | @serif-regular     | Markdown serif font, embedded as BinaryData      |
+| serifBold          | @serif-bold        | Markdown bold serif font, embedded as BinaryData |
++--------------------+--------------------+--------------------------------------------------+
 
 ## toolchain
 

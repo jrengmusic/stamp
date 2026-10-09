@@ -19,9 +19,13 @@ static bool writeDocument (const juce::File& inputFile, const juce::File& output
         jam::VulkanEngine::getPrimaryDisplayExtent(), ProjectInfo::projectName, jam::VulkanEngine::getFrameBudget(), noCacheFile, gpuDisabled);
 
     jam::SharedInstance<jam::SharedDocuments> documents { std::in_place };
-    jam::StyleManager styleManager { { BinaryData::fetcher } };
-    styleManager.registerStyle (files::markdownStyleSheet);
-    styleManager.registerStyle (files::mermaidStyleSheet);
+    juce::ValueTree config { Id::toType (Id::config) };
+
+    for (const auto& styleSheet : { files::markdownStyleSheet, files::mermaidStyleSheet })
+        for (const auto& child : jam::Css::getOrCreate (juce::Identifier { styleSheet }).getValueTree (Id::toType (Id::config), juce::Identifier { juce::File::createFileWithoutCheckingPath (styleSheet).getFileNameWithoutExtension() }))
+            config.appendChild (child.createCopy(), nullptr);
+
+    jam::StyleManager styleManager { { BinaryData::fetcher }, config };
     jam::StyleMarkdown styleMarkdown;
     juce::LookAndFeel::setDefaultLookAndFeel (&styleMarkdown);
 

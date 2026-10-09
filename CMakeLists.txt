@@ -377,6 +377,8 @@ ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayBook.ttf
 ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayBold.ttf
 ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayMonoBook.ttf
 ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayMonoBold.ttf
+${CMAKE_CURRENT_SOURCE_DIR}/../eve/Source/fonts/Merriweather_24pt-Regular.ttf
+${CMAKE_CURRENT_SOURCE_DIR}/../eve/Source/fonts/Merriweather_24pt-Bold.ttf
 )
 
 juce_add_binary_data(${PROJECT_NAME}_BinaryData
