@@ -16,7 +16,7 @@
 
 /**
  * @file Page.h
- * @brief Page sizes — the generated map namespace of page lookups.
+ * @brief Page sizes, page types and margin box lookups — the generated map namespace.
  */
 
 #pragma once
@@ -26,9 +26,9 @@ namespace map
 /*_____________________________________________________________________________*/
 
 /**
- * @brief Page sizes — the size and the margin of one page, in points.
+ * @brief Page sizes — the CSS size keywords a4 and letter, in points.
  *
- * Each row is a page name that the command line accepts. The key indexes the width, height and margin lookups.
+ * Each row is a CSS size keyword. The key indexes the width and height lookups.
  */
 struct Page : public jam::Bimap<int>
 {
@@ -39,8 +39,8 @@ struct Page : public jam::Bimap<int>
 
     enum value : int
     {
-        a4     = 0,///< ISO A4, 20 mm margin
-        letter = 1,///< US Letter, 20 mm margin
+        a4     = 0,///< ISO A4
+        letter = 1,///< US Letter
     };
 
     static Page* getInstance() noexcept
@@ -59,9 +59,9 @@ namespace map
 /*_____________________________________________________________________________*/
 
 /**
- * @brief Page sizes — the size and the margin of one page, in points.
+ * @brief Page sizes — the CSS size keywords a4 and letter, in points.
  *
- * Each row is a page name that the command line accepts. The key indexes the width, height and margin lookups.
+ * Each row is a CSS size keyword. The key indexes the width and height lookups.
  */
 inline constexpr jam::LookupTable<int, double, Page::letter + 1> pageWidths {
     {
@@ -73,9 +73,9 @@ inline constexpr jam::LookupTable<int, double, Page::letter + 1> pageWidths {
 //==============================================================================
 
 /**
- * @brief Page sizes — the size and the margin of one page, in points.
+ * @brief Page sizes — the CSS size keywords a4 and letter, in points.
  *
- * Each row is a page name that the command line accepts. The key indexes the width, height and margin lookups.
+ * Each row is a CSS size keyword. The key indexes the width and height lookups.
  */
 inline constexpr jam::LookupTable<int, double, Page::letter + 1> pageHeights {
     {
@@ -87,14 +87,66 @@ inline constexpr jam::LookupTable<int, double, Page::letter + 1> pageHeights {
 //==============================================================================
 
 /**
- * @brief Page sizes — the size and the margin of one page, in points.
+ * @brief Page types — the CSS named page types that stamp assigns.
  *
- * Each row is a page name that the command line accepts. The key indexes the width, height and margin lookups.
+ * Each row is a page type that selects a named page rule. The key is the enum value and the value is the CSS name.
  */
-inline constexpr jam::LookupTable<int, double, Page::letter + 1> pageMargins {
+struct PageType : public jam::Bimap<int>
+{
+    PageType() : jam::Bimap<int> { {
+            { cover,     juce::String::fromUTF8 ("cover") },
+            { toc,       juce::String::fromUTF8 ("toc") },
+            { index,     juce::String::fromUTF8 ("index") },
+            { backCover, juce::String::fromUTF8 ("back-cover") },
+    } } {}
+
+    enum value : int
     {
-        { 0, 56.693 },
-        { 1, 56.693 },
+        cover     = 0,///< Cover page
+        toc       = 1,///< Table-of-contents pages
+        index     = 2,///< Index pages
+        backCover = 3,///< Back cover page
+    };
+
+    static PageType* getInstance() noexcept
+    {
+        return jam::SharedInstance<PageType>::getInstance();
+    }
+};
+
+//==============================================================================
+
+/**
+ * @brief Margin boxes — the alignment and the edge of each page-margin box.
+ *
+ * Each row is a page-margin box keyed by its map::MarginBoxType value. The justification is the horizontal alignment of css-page-3 Table 2 with the vertical alignment in the middle. The bottom column is true for a box in the bottom margin.
+ */
+inline constexpr jam::LookupTable<int, int, map::MarginBoxType::bottomRight + 1> marginBoxJustifications {
+    {
+        { 0, juce::Justification::centredLeft },
+        { 1, juce::Justification::centred },
+        { 2, juce::Justification::centredRight },
+        { 3, juce::Justification::centredLeft },
+        { 4, juce::Justification::centred },
+        { 5, juce::Justification::centredRight },
+    }
+};
+
+//==============================================================================
+
+/**
+ * @brief Margin boxes — the alignment and the edge of each page-margin box.
+ *
+ * Each row is a page-margin box keyed by its map::MarginBoxType value. The justification is the horizontal alignment of css-page-3 Table 2 with the vertical alignment in the middle. The bottom column is true for a box in the bottom margin.
+ */
+inline constexpr jam::LookupTable<int, bool, map::MarginBoxType::bottomRight + 1> bottomMarginBoxes {
+    {
+        { 0, false },
+        { 1, false },
+        { 2, false },
+        { 3, true },
+        { 4, true },
+        { 5, true },
     }
 };
 

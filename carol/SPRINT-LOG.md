@@ -1,5 +1,109 @@
 # SPRINT-LOG
 
+## Sprint 6: Manual Composer — Cover, TOC, Margin Boxes, Index, Back Cover, Links; JRENG! Filter Strip Manual ✅
+
+**Date:** 2026-10-12
+**Duration:** about 4 hours, from 11:01 UTC
+**Plan:** `~/.claude/plans/staged-sauteeing-tulip.md`: Phases A–G, Amendments 1–7. The approved PLAN ends with the log, so the run had no gate until this log.
+
+This is the primary record. `jam/carol/SPRINT-LOG.md` Sprint 161 records the jam side: CSS `@page` and cascade, PDF links, pandoc header attributes and section numbers, inline SVG, and the paging API.
+
+### Agents Participated
+- **COUNSELOR** (opus-5.5): design discussion, plan, delegations, validation by read, audit triage, `Page.h` brief fix, RFC `~/.carol/RFC-subagent-background.md`, this log.
+- **Engineer** (sonnet): stamp composer, jfs manual, audit fixes, doxygen pass.
+- **Librarian** (haiku): pandoc metadata and numbering, css-page-3, GCPM, PDF links.
+- **Pathfinder** (haiku): discovery, oracle PDF extraction, working-tree reads.
+- **Auditor** (opus): one sweep, 34 findings, shared with jam.
+
+### Decisions (ARCHITECT, verbatim)
+See jam Sprint 161, Decisions 1–8. The stamp-specific rulings:
+- *"so this is at project level? not at module? stamp exclusive?"* → **"stamp composes"**.
+- *"extract the oracle PDF to markdown formatted as stamp should read and produce"*; *"use placeholder png/svg for any images you need … or can you extract from the PDF?"*
+- **"Back cover after index"**.
+
+### Design
+- **CLI:** `stamp <input.md> <output.pdf>`. CSS `size` is the single source of the page size. The `[page]` argument is deleted.
+- **Config cascade:** `CssDocument::applyTo` merges, in order:
+  1. `page.css`, the user-agent default (`@page { size: A4; margin: 56.693pt; }`);
+  2. `markdown.css`;
+  3. `mermaid.css`;
+  4. the front matter `css:` file, resolved beside the `.md`.
+- **Composition** (`namespace manual`):
+  - `ManualContents.cpp`: `getCoverText`, `getContentsText`, `getTermPages`, `getIndexText`, `getPageLink`, `getIndexEntry`.
+  - `ManualPages.cpp`: `getBoxProperty`, `getChapterStarts`, `getHeadingString`, `getBoxText`, `paintBoxBorder`, `getChapterRows`, `getPageStrings`, `paintMarginBoxes`.
+  - `Main.cpp`: `addPages`, `addSectionPages`, and the page geometry and row helpers.
+- **Generated pages** are markdown, painted by a second `MarkdownComponent` with the same CSS-LAF. Links travel on `AttributedString::Link`.
+- **Page order:** cover, TOC, body, index, back cover.
+- **Destinations:** each body page gets `addDestination (String (pageNumber), pageIndex)`.
+- **Margin boxes:**
+  - Content is a string, `counter(page)` or `string(<name>)`, with `first` as the default (GCPM).
+  - A named page style overrides the base `@page` style per property.
+  - `content: none` paints nothing.
+- **Cast tables** (`project-info.md`, `cast/spell.md`):
+  - `## page`: `a4` and `letter`; the margin column is deleted.
+  - `## page type`: cover, toc, index, back-cover.
+  - `## margin box`: justification and bottom lookups.
+  - `## files`: `help`, `pageStyleSheet`.
+  - `## binary`: `pageStyleSheet`.
+
+### Files Modified (stamp, 11)
+- `project-info.md`: `## page`, `## page type`, `## margin box`, `## files`, `## binary`.
+- `cast/spell.md`: the matching rows and aliases (`@Files`, `@justificationTable`, `@bottomTable`); `:39` is the `Page.h` brief.
+- `CMakeLists.txt`: binary glob.
+- `Source/page.css` (new).
+- `Source/HELP.md`: the new usage line.
+- `Source/Main.cpp`: CLI, cascade, page loop.
+- `Source/Manual.h`, `Source/ManualContents.cpp`, `Source/ManualPages.cpp` (new).
+- `Source/generated/Page.h`, `Source/generated/Files.h` (new): hand-mirrored. A cast run reconciles them.
+
+### Files Modified (jreng-filter-strip, `Source/installer/manual/`, new)
+- `JRENG! Filter Strip Manual.md`:
+  - front matter: title, subtitle, cover-image, css, toc, toc-depth 2, toc-title, number-sections, and 26 index terms from the Functions labels;
+  - chapters, with `{.unnumbered .unlisted}` subheadings;
+  - the back cover `{.unnumbered .unlisted .back-cover}`;
+  - the source typo "makebsure", kept verbatim.
+- `JRENG! Filter Strip Manual.css`: `@page` margin boxes and borders; `@page cover` and `@page back-cover` with `content: none`; `h1` page break and `string-set`; `title` `string-set`; Helvetica `@font-face` overrides.
+- `images/`: `cover.jpg`, `authorization-1..5.png`, `interface.jpg`, `high-pass.svg`, `low-pass.svg`, extracted from the oracle PDF.
+
+### Alignment Check
+- [x] BLESSED principles followed
+- [x] NAMES.md adhered
+- [x] MANIFESTO.md principles applied
+
+### Problems Solved
+- **Blocker 2.** `contentText` was registered with `juce::var`, but the call passes `const juce::var&` (`juce_Variant.h:233`) and `int&`. Now registered with `const juce::var&, int&, const juce::NamedValueSet&` (`ManualPages.cpp:82-94`).
+- **Hand tables.** `marginBoxJustifications` and `bottomMarginBoxes` moved to cast.
+- **DRY.** `getPageLink`, `getIndexEntry`, `getBoxProperty`.
+
+### Audit
+- Shared with jam Sprint 161: 34 findings, triage recorded there.
+
+### Violations
+- See jam Sprint 161. Specific to stamp:
+  - The doxygen Engineer edited the generated `Page.h` brief, whose source is `cast/spell.md:39`. COUNSELOR set both lines to the same text.
+  - The Engineer registered `contentText` twice with argument types that did not match the call (Blocker 2).
+
+### State for Continuation
+- **Not built.**
+  1. ARCHITECT builds jam generation: `cast cast/spell.md` in jam.
+  2. ARCHITECT builds stamp: `cast cast/spell.md --debug`. Cast reconciles `Page.h`, `Files.h` and `RELEASE.md`.
+  3. ARCHITECT runs `stamp "…/manual/JRENG! Filter Strip Manual.md" out.pdf`.
+- Verify `out.pdf`, read-only:
+  - `pdfinfo`: A4 and the page count;
+  - `pdftotext -layout`: cover, TOC numbers and page labels, uppercase headers, footer numbers, index letter groups, back cover with no header or footer;
+  - `pdfimages -list`: raster images only;
+  - `pdftocairo -svg`: the plot pages have paths and no images;
+  - `/Annots`, `/Subtype /Link`, `/Dest` and `/URI` counts.
+- Regression: a markdown file with no front matter renders as before, except for the `page.css` margins.
+- `ninja doxygen` and its zero-warning check are not yet run.
+- The images are extracted from the oracle. ARCHITECT replaces them when the source assets are ready.
+
+### Debts Paid
+None.
+
+### Debts Deferred
+None.
+
 ## Sprint 4: MarkdownComponent Replaces Whelmed ✅
 
 **Date:** 2026-10-08

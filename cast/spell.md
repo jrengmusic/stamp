@@ -1,25 +1,28 @@
 ## index
 
-+---------------+-------------------------------------------------+
-| alias         | symbol                                          |
-+===============+=================================================+
-| @code         | ../../jam/cast/code.cast                        |
-| @cmake        | cmake.cast                                      |
-| @project-info | ../project-info.md                              |
-| @signing      | signing.md                                      |
-| @ProjectInfo  | ../Source/generated/ProjectInfo.h               |
-| @Page         | ../Source/generated/Page.h                      |
-| @CMakeLists   | ../CMakeLists.txt                               |
-| @Entitlements | ../entitlements.plist                           |
-| @semicolon    | ;                                               |
-| @bimap        | jam::Bimap<int>                                 |
-| @pageTable    | jam::LookupTable<int, double, Page::letter + 1> |
-| @installer    | installer.cast                                  |
-| @Distribution | installer/mac/distribution.xml                  |
-| @Installer    | installer/win/installer.nsi                     |
-| @Gh           | ../gh.cmake                                     |
-| @Release      | ../RELEASE.md                                   |
-+---------------+-------------------------------------------------+
++---------------------+------------------------------------------------------------------+
+| alias               | symbol                                                           |
++=====================+==================================================================+
+| @code               | ../../jam/cast/code.cast                                         |
+| @cmake              | cmake.cast                                                       |
+| @project-info       | ../project-info.md                                               |
+| @signing            | signing.md                                                       |
+| @ProjectInfo        | ../Source/generated/ProjectInfo.h                                |
+| @Page               | ../Source/generated/Page.h                                       |
+| @Files              | ../Source/generated/Files.h                                      |
+| @CMakeLists         | ../CMakeLists.txt                                                |
+| @Entitlements       | ../entitlements.plist                                            |
+| @semicolon          | ;                                                                |
+| @bimap              | jam::Bimap<int>                                                  |
+| @pageTable          | jam::LookupTable<int, double, Page::letter + 1>                  |
+| @justificationTable | jam::LookupTable<int, int, map::MarginBoxType::bottomRight + 1>  |
+| @bottomTable        | jam::LookupTable<int, bool, map::MarginBoxType::bottomRight + 1> |
+| @installer          | installer.cast                                                   |
+| @Distribution       | installer/mac/distribution.xml                                   |
+| @Installer          | installer/win/installer.nsi                                      |
+| @Gh                 | ../gh.cmake                                                      |
+| @Release            | ../RELEASE.md                                                    |
++---------------------+------------------------------------------------------------------+
 
 ## headers
 
@@ -33,7 +36,12 @@
 +----------------+------------------------------------------------------------------------------------------+-------------------------------------------+
 | Page.h         | ```                                                                                      |                                           |
 |                | @file Page.h                                                                             |                                           |
-|                | @brief Page sizes — the generated map namespace of page lookups.                         |                                           |
+|                | @brief Page sizes, page types and margin box lookups — the generated map namespace.      |                                           |
+|                | ```                                                                                      |                                           |
++----------------+------------------------------------------------------------------------------------------+-------------------------------------------+
+| Files.h        | ```                                                                                      |                                           |
+|                | @file Files.h                                                                            |                                           |
+|                | @brief Resource file names — the generated files namespace.                              |                                           |
 |                | ```                                                                                      |                                           |
 +----------------+------------------------------------------------------------------------------------------+-------------------------------------------+
 | CMakeLists.txt | ```                                                                                      |                                           |
@@ -97,6 +105,12 @@
 |                                               |                           | - [description]: @headers:brief               |               |
 |                                               |                           | > - [list]: @code:constant                    |               |
 +-----------------------------------------------+---------------------------+-----------------------------------------------+---------------+
+| > - [list]: @project-info:files               |                           | @code:namespace                               | @Files        |
+|                                               |                           | - macro: #pragma once                         |               |
+|                                               |                           | - name: files                                 |               |
+|                                               |                           | - [description]: @headers:brief               |               |
+|                                               |                           | > - [list]: @code:constant                    |               |
++-----------------------------------------------+---------------------------+-----------------------------------------------+---------------+
 | > > > - [list]: @project-info:page            | - [list]: @code:linebreak | @code:namespace                               | @Page         |
 |                                               |                           | - macro: #pragma once                         |               |
 | > > - [list]: @project-info:page              |                           | - name: map                                   |               |
@@ -129,13 +143,34 @@
 |                                               |                           | - name: pageHeights                           |               |
 |                                               |                           | > > - [list]: @code:entry                     |               |
 +-----------------------------------------------+---------------------------+-----------------------------------------------+---------------+
-| > > - [list]: @project-info:page              | - [list]: @code:linebreak | @code:namespace                               | @Page         |
+| > > > - [list]: @project-info:page type       | - [list]: @code:linebreak | @code:namespace                               | @Page         |
 |                                               |                           | - name: map                                   |               |
-| > > - [list]: @project-info:page:key          | > > - [list]: @code:comma |                                               |               |
-| > > - [list]: @project-info:page:margin       |                           |                                               |               |
+| > > - [list]: @project-info:page type         |                           |                                               |               |
+|                                               |                           | @code:bimap                                   |               |
+|                                               |                           | - name: PageType                              |               |
+|                                               |                           | - [description]: Page types.                  |               |
+|                                               |                           | - base: @bimap                                |               |
+|                                               |                           | - keyType: int                                |               |
+|                                               |                           | - valueType: juce::String                     |               |
+|                                               |                           | > > > - [list]: @code:bimap-entry             |               |
+|                                               |                           | > > - [list]: @code:enum-entry                |               |
++-----------------------------------------------+---------------------------+-----------------------------------------------+---------------+
+| > > - [list]: @project-info:margin box        | - [list]: @code:linebreak | @code:namespace                               | @Page         |
+|                                               |                           | - name: map                                   |               |
+| > > - [list]: @project-info:margin box:key    | > > - [list]: @code:comma |                                               |               |
+| > > - [list]: @project-info:margin box:justification |                           |                                               |               |
 |                                               |                           | @code:lookup-table                            |               |
-|                                               |                           | - type: @pageTable                            |               |
-|                                               |                           | - name: pageMargins                           |               |
+|                                               |                           | - type: @justificationTable                   |               |
+|                                               |                           | - name: marginBoxJustifications               |               |
+|                                               |                           | > > - [list]: @code:entry                     |               |
++-----------------------------------------------+---------------------------+-----------------------------------------------+---------------+
+| > > - [list]: @project-info:margin box        | - [list]: @code:linebreak | @code:namespace                               | @Page         |
+|                                               |                           | - name: map                                   |               |
+| > > - [list]: @project-info:margin box:key    | > > - [list]: @code:comma |                                               |               |
+| > > - [list]: @project-info:margin box:bottom |                           |                                               |               |
+|                                               |                           | @code:lookup-table                            |               |
+|                                               |                           | - type: @bottomTable                          |               |
+|                                               |                           | - name: bottomMarginBoxes                     |               |
 |                                               |                           | > > - [list]: @code:entry                     |               |
 +-----------------------------------------------+---------------------------+-----------------------------------------------+---------------+
 | - [list]: @project-info:cmake                 |                           | @installer:distribution                       | @Distribution |

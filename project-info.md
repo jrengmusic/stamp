@@ -44,17 +44,68 @@ Every field is a complete literal; nothing downstream derives, concatenates, or 
 ## page
 
 ```
-@brief Page sizes — the size and the margin of one page, in points.
+@brief Page sizes — the CSS size keywords a4 and letter, in points.
 
-Each row is a page name that the command line accepts. The key indexes the width, height and margin lookups.
+Each row is a CSS size keyword. The key indexes the width and height lookups.
 ```
 
-+--------+-----+---------+--------+--------+-------------------------+
-| name   | key | width   | height | margin | description             |
-+========+=====+=========+========+========+=========================+
-| a4     | 0   | 595.276 | 841.89 | 56.693 | ISO A4, 20 mm margin    |
-| letter | 1   | 612     | 792    | 56.693 | US Letter, 20 mm margin |
-+--------+-----+---------+--------+--------+-------------------------+
++--------+-----+---------+--------+-------------+
+| name   | key | width   | height | description |
++========+=====+=========+========+=============+
+| a4     | 0   | 595.276 | 841.89 | ISO A4      |
+| letter | 1   | 612     | 792    | US Letter   |
++--------+-----+---------+--------+-------------+
+
+## page type
+
+```
+@brief Page types — the CSS named page types that stamp assigns.
+
+Each row is a page type that selects a named page rule. The key is the enum value and the value is the CSS name.
+```
+
++-----------+-----+--------------+-------------------------+
+| name      | key | value        | description             |
++===========+=====+==============+=========================+
+| cover     | 0   | `cover`      | Cover page              |
+| toc       | 1   | `toc`        | Table-of-contents pages |
+| index     | 2   | `index`      | Index pages             |
+| backCover | 3   | `back-cover` | Back cover page         |
++-----------+-----+--------------+-------------------------+
+
+## margin box
+
+```
+@brief Margin boxes — the alignment and the edge of each page-margin box.
+
+Each row is a page-margin box keyed by its map::MarginBoxType value. The justification is the horizontal alignment of css-page-3 Table 2 with the vertical alignment in the middle. The bottom column is true for a box in the bottom margin.
+```
+
++--------------+-----+-------------------------------------+--------+---------------------------------+
+| name         | key | justification                       | bottom | description                     |
++==============+=====+=====================================+========+=================================+
+| topLeft      | 0   | `juce::Justification::centredLeft`  | false  | Top left box, left aligned      |
+| topCenter    | 1   | `juce::Justification::centred`      | false  | Top centre box, centred         |
+| topRight     | 2   | `juce::Justification::centredRight` | false  | Top right box, right aligned    |
+| bottomLeft   | 3   | `juce::Justification::centredLeft`  | true   | Bottom left box, left aligned   |
+| bottomCenter | 4   | `juce::Justification::centred`      | true   | Bottom centre box, centred      |
+| bottomRight  | 5   | `juce::Justification::centredRight` | true   | Bottom right box, right aligned |
++--------------+-----+-------------------------------------+--------+---------------------------------+
+
+## files
+
+```
+@brief Resource file names — the files namespace, generated.
+
+Every field is the literal file name of an embedded resource.
+```
+
++----------------+-------+----------+-----------+-----------------------------------------+
+| name           | type  | value    | format    | description                             |
++================+=======+==========+===========+=========================================+
+| help           | @char | HELP.md  | toLiteral | Help document                           |
+| pageStyleSheet | @char | page.css | toLiteral | Page stylesheet, the user-agent default |
++----------------+-------+----------+-----------+-----------------------------------------+
 
 ## cmake
 
@@ -219,6 +270,7 @@ Each row is a page name that the command line accepts. The key indexes the width
 | name               | value              | description                                     |
 +====================+====================+=================================================+
 | help               | Source/HELP.md     | Help document source                            |
+| pageStyleSheet     | Source/page.css    | Page stylesheet, embedded as BinaryData         |
 | mermaidStyleSheet  | @mermaid-style     | Mermaid stylesheet, embedded as BinaryData      |
 | markdownStyleSheet | @markdown-style    | Markdown stylesheet, embedded as BinaryData     |
 | displayBook        | @display-book      | Markdown body font, embedded as BinaryData      |
@@ -269,7 +321,7 @@ Each row is a page name that the command line accepts. The key indexes the width
 | note                                                                                                                   |
 +========================================================================================================================+
 | Release lane: a signed macOS pkg and Windows x64 and arm64 installers, uploaded to the GitHub release.                 |
-| stamp input.md output.pdf [page] turns markdown into PDF with real text, fixed A4 or Letter pages, and embedded fonts. |
+| stamp input.md output.pdf turns markdown into PDF with real text, fixed A4 or Letter pages, and embedded fonts.        |
 | Signing data lives in cast/signing.md, and entitlements.plist is generated from it.                                    |
 +------------------------------------------------------------------------------------------------------------------------+
 

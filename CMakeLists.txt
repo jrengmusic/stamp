@@ -371,6 +371,7 @@ endif()
 
 file(GLOB CAST_BINARY_FILES CONFIGURE_DEPENDS
 Source/HELP.md
+Source/page.css
 ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/mermaid.css
 ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/markdown.css
 ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayBook.ttf
