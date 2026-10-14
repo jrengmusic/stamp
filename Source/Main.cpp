@@ -189,6 +189,7 @@ static void addPages (jam::PdfDocument& document,
 
 static bool writeDocument (const juce::File& inputFile, const juce::File& outputFile)
 {
+    static const juce::Identifier css { Extensions::css };
     static constexpr bool gpuDisabled { false };
     const juce::File noCacheFile;
 
@@ -205,8 +206,8 @@ static bool writeDocument (const juce::File& inputFile, const juce::File& output
     for (const auto& styleSheet : { files::markdownStyleSheet, files::mermaidStyleSheet })
         jam::Css::getOrCreate (juce::Identifier { styleSheet }).applyTo (config, juce::Identifier { juce::File::createFileWithoutCheckingPath (styleSheet).getFileNameWithoutExtension() });
 
-    if (properties.contains (Id::css))
-        jam::Css::parse (inputFile.getSiblingFile (properties[Id::css].toString()).loadFileAsString()).applyTo (config, Id::markdown);
+    if (properties.contains (css))
+        jam::Css::parse (inputFile.getSiblingFile (properties[css].toString()).loadFileAsString()).applyTo (config, Id::markdown);
 
     jam::StyleManager styleManager { { BinaryData::fetcher }, config };
     jam::StyleMarkdown styleMarkdown;
