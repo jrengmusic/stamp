@@ -81,16 +81,16 @@ Each row is a page type that selects a named page rule. The key is the enum valu
 Each row is a page-margin box keyed by its map::MarginBoxType value. The justification is the horizontal alignment of css-page-3 Table 2 with the vertical alignment in the middle. The bottom column is true for a box in the bottom margin.
 ```
 
-+--------------+-----+-------------------------------------+--------+---------------------------------+
-| name         | key | justification                       | bottom | description                     |
-+==============+=====+=====================================+========+=================================+
-| topLeft      | 0   | `juce::Justification::centredLeft`  | false  | Top left box, left aligned      |
-| topCenter    | 1   | `juce::Justification::centred`      | false  | Top centre box, centred         |
-| topRight     | 2   | `juce::Justification::centredRight` | false  | Top right box, right aligned    |
-| bottomLeft   | 3   | `juce::Justification::centredLeft`  | true   | Bottom left box, left aligned   |
-| bottomCenter | 4   | `juce::Justification::centred`      | true   | Bottom centre box, centred      |
-| bottomRight  | 5   | `juce::Justification::centredRight` | true   | Bottom right box, right aligned |
-+--------------+-----+-------------------------------------+--------+---------------------------------+
++--------------+-----+-----------------------------------+--------+---------------------------------+
+| name         | key | justification                     | bottom | description                     |
++==============+=====+===================================+========+=================================+
+| topLeft      | 0   | juce::Justification::centredLeft  | false  | Top left box, left aligned      |
+| topCenter    | 1   | juce::Justification::centred      | false  | Top centre box, centred         |
+| topRight     | 2   | juce::Justification::centredRight | false  | Top right box, right aligned    |
+| bottomLeft   | 3   | juce::Justification::centredLeft  | true   | Bottom left box, left aligned   |
+| bottomCenter | 4   | juce::Justification::centred      | true   | Bottom centre box, centred      |
+| bottomRight  | 5   | juce::Justification::centredRight | true   | Bottom right box, right aligned |
++--------------+-----+-----------------------------------+--------+---------------------------------+
 
 ## files
 
@@ -317,13 +317,13 @@ Every field is the literal file name of an embedded resource.
 
 ## release notes
 
-+------------------------------------------------------------------------------------------------------------------------+
-| note                                                                                                                   |
-+========================================================================================================================+
-| Release lane: a signed macOS pkg and Windows x64 and arm64 installers, uploaded to the GitHub release.                 |
-| stamp input.md output.pdf turns markdown into PDF with real text, fixed A4 or Letter pages, and embedded fonts.        |
-| Signing data lives in cast/signing.md, and entitlements.plist is generated from it.                                    |
-+------------------------------------------------------------------------------------------------------------------------+
++-----------------------------------------------------------------------------------------------------------------+
+| note                                                                                                            |
++=================================================================================================================+
+| Release lane: a signed macOS pkg and Windows x64 and arm64 installers, uploaded to the GitHub release.          |
+| stamp input.md output.pdf turns markdown into PDF with real text, fixed A4 or Letter pages, and embedded fonts. |
+| Signing data lives in cast/signing.md, and entitlements.plist is generated from it.                             |
++-----------------------------------------------------------------------------------------------------------------+
 
 ## release
 

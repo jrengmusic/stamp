@@ -111,6 +111,20 @@ static std::unique_ptr<jam::MarkdownComponent> getContents (const juce::NamedVal
     return contents;
 }
 
+static const juce::Identifier& getPageSheet()
+{
+    static const juce::Identifier pageSheet { Id::toType (Id::page) };
+
+    return pageSheet;
+}
+
+static const juce::Identifier& getElementSheet()
+{
+    static const juce::Identifier elementSheet { Id::toType (Id::element) };
+
+    return elementSheet;
+}
+
 static int addSectionPages (jam::PdfDocument& document,
                             jam::MarkdownComponent& component,
                             const jam::Array<juce::Range<int>>& pages,
@@ -130,7 +144,7 @@ static int addSectionPages (jam::PdfDocument& document,
             juce::Graphics g { context };
 
             g.fillAll (component.findColour (map::ColourId::markdownBackgroundColourId));
-            manual::paintMarginBoxes (g, jam::StyleManager::getInstance()->getConfig (Id::page), pageType, page, margin, pageNumber, manual::getPageStrings (properties, headings, component, jam::StyleManager::getInstance()->getConfig (Id::element), rows));
+            manual::paintMarginBoxes (g, jam::StyleManager::getInstance()->getConfig (getPageSheet()), pageType, page, margin, pageNumber, manual::getPageStrings (properties, headings, component, jam::StyleManager::getInstance()->getConfig (getElementSheet()), rows));
             g.addTransform (juce::AffineTransform::translation (margin, margin));
             component.paintPage (g, rows);
         }
@@ -147,8 +161,8 @@ static void addPages (jam::PdfDocument& document,
                       const juce::NamedValueSet& properties,
                       const juce::File& inputFile)
 {
-    const auto area { getPageArea (jam::StyleManager::getInstance()->getConfig (Id::page)) };
-    const auto margin { static_cast<float> (jam::StyleManager::getInstance()->getConfig (Id::page).getProperty (Id::margin)) };
+    const auto area { getPageArea (jam::StyleManager::getInstance()->getConfig (getPageSheet())) };
+    const auto margin { static_cast<float> (jam::StyleManager::getInstance()->getConfig (getPageSheet()).getProperty (Id::margin)) };
     const auto content { area.reduced (margin) };
     const juce::Identifier backCover { map::PageType::getInstance()->get (map::PageType::backCover) };
     jam::Array<const jam::Document::Element*> headings;
@@ -159,7 +173,7 @@ static void addPages (jam::PdfDocument& document,
 
     const auto* root { markdown.getRoot() };
     const auto body { getComponent (std::move (markdown), content) };
-    const auto chapters (manual::getChapterRows (*root, *body, jam::StyleManager::getInstance()->getConfig (Id::element)));
+    const auto chapters (manual::getChapterRows (*root, *body, jam::StyleManager::getInstance()->getConfig (getElementSheet())));
     const auto bodyPages (getBodyPages (*body, chapters, headings, content.getHeight(), Id::none));
     const auto cover { getComponent (manual::getCoverText (properties), inputFile, content) };
     const auto coverPages (getSectionPages (*cover, content.getHeight()));

@@ -1,4 +1,5 @@
 #include <JuceHeader.h>
+#include <Page.h>
 #include "Manual.h"
 
 namespace manual

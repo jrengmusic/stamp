@@ -58,13 +58,13 @@ juce::String getContentsText (const juce::NamedValueSet& properties,
         auto minimumLevel { std::numeric_limits<int>::max() };
 
         for (const auto* heading : headings)
-            minimumLevel = juce::jmin (minimumLevel, heading->get<juce::String> (Id::level)->getIntValue());
+            minimumLevel = juce::jmin (minimumLevel, *heading->get<int> (Id::level));
 
         text << Chars::hash << Chars::space << properties.getWithDefault (Id::tocTitle, text::English::tableOfContents).toString() << Chars::newline << Chars::newline;
 
         for (const auto* heading : headings)
         {
-            const auto level { heading->get<juce::String> (Id::level)->getIntValue() };
+            const auto level { *heading->get<int> (Id::level) };
 
             if (level <= depth and pageNumbers.contains (heading) and not heading->get<jam::Document::Identifiers> (Id::classes)->contains (Id::unlisted))
                 text << juce::String::repeatedString (juce::String::charToString (Chars::space), indentWidth * (level - minimumLevel)) << Chars::dash << Chars::space

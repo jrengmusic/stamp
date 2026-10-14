@@ -5,7 +5,7 @@ Simply Turns Any Markdown into PDF
 ## What's New
 
 - Release lane: a signed macOS pkg and Windows x64 and arm64 installers, uploaded to the GitHub release.
-- stamp input.md output.pdf [page] turns markdown into PDF with real text, fixed A4 or Letter pages, and embedded fonts.
+- stamp input.md output.pdf turns markdown into PDF with real text, fixed A4 or Letter pages, and embedded fonts.
 - Signing data lives in cast/signing.md, and entitlements.plist is generated from it.
 
 ## Platforms

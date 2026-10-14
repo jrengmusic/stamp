@@ -1,5 +1,22 @@
 # SPRINT-LOG
 
+## Sprint 7: Build Against the jam Contract Audit; Page.h From cast; Margin-Box Justifications as Plain Cells ✅
+
+**Date:** 2026-10-14
+**Duration:** part of three sessions. `jam/carol/SPRINT-LOG.md` Sprint 163 is the primary record.
+
+### Files Modified
+- `Source/ManualContents.cpp:61, :67`: heading levels read as `int` (`get<int> (Id::level)`).
+- `Source/Main.cpp`: the sheet identifiers are function-local accessors `getPageSheet()` and `getElementSheet()`. File-scope statics crashed before `main` (cross-unit static-init order).
+- `Source/ManualPages.cpp`: includes `Page.h`. The file had never compiled against a cast-generated `Page.h`.
+- `project-info.md:87-92`: the six justification cells are plain cells. Backtick cells are literals to cast (`cast/Source/Model.h:1608-1615`), so they generated quoted strings. The Sprint 6 `Page.h` was a hand mirror (`:57`), which hid this.
+- `cast/spell.md`: the `## output` table is re-laid by a cast run (column 1 widened; cell text unchanged).
+- `RELEASE.md`: one usage bullet lost the `[page]` token. The source of this edit was not traced this sprint.
+
+### Verification
+- `cast cast/spell.md --debug`: 0 errors, 0 warnings. `git diff HEAD -- Source/generated/Page.h` is empty.
+- `stamp "installer/manual/JRENG! Filter Strip Manual.md"`: exit 0, 19 pages. `stamp "installer/JRENG! Filter Strip Manual.md"`: exit 0, 3 pages (it aborted before jam made an absent sheet return an empty tree).
+
 ## Sprint 6: Manual Composer — Cover, TOC, Margin Boxes, Index, Back Cover, Links; JRENG! Filter Strip Manual ✅
 
 **Date:** 2026-10-12
