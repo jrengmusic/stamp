@@ -8,7 +8,6 @@
 | @char              | const char* const                                                      |
 | @juce-path         | ${CMAKE_CURRENT_SOURCE_DIR}/../../JUCE                                 |
 | @user-module       | ${CMAKE_CURRENT_SOURCE_DIR}/../jam                                     |
-| @patch             | ${CAST_USER_MODULE_PATH}/patch                                         |
 | @source            | ${CMAKE_CURRENT_SOURCE_DIR}/Source                                     |
 | @mermaid-style     | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/mermaid.css               |
 | @generated         | ${CMAKE_CURRENT_SOURCE_DIR}/Source/generated                           |
@@ -187,18 +186,6 @@ Every field is the literal file name of an embedded resource.
 | guiBasics | juce_gui_basics |
 | guiExtra  | juce_gui_extra  |
 +-----------+-----------------+
-
-## patch
-
-+--------+---------------------------------------------+----------------------------------------------+
-| root   | name                                        | description                                  |
-+========+=============================================+==============================================+
-| @patch | juce-cached-image-factory-hook.patch        | External CachedComponentImage factory        |
-| @patch | juce-direct2d-helpers-visibility-hook.patch | Direct2D helpers visibility gate             |
-| @patch | juce-image-subsection-hook.patch            | Root image and subsection bounds hooks       |
-| @patch | juce-vulkan-engine-hook.patch               | External graphics context factory for Vulkan |
-| @patch | juce-paint-update-rect-hook.patch           | OS dirty rectangle before native paint       |
-+--------+---------------------------------------------+----------------------------------------------+
 
 ## user module
 
