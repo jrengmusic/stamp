@@ -131,8 +131,6 @@ Every field is the literal file name of an embedded resource.
 +-----------------------------+-----------------------------------------------+-------------------------------------------+
 | userModulePath              | @user-module                                  | User module root                          |
 +-----------------------------+-----------------------------------------------+-------------------------------------------+
-| vulkanPath                  | ${CMAKE_CURRENT_SOURCE_DIR}/../../Vulkan      | Vulkan SDK root                           |
-+-----------------------------+-----------------------------------------------+-------------------------------------------+
 | installDirectory            | $ENV{HOME}/.local/bin                         | Installed binary directory                |
 +-----------------------------+-----------------------------------------------+-------------------------------------------+
 | bundleIdentifier            | com.jrengmusic.stamp                          | JUCE BUNDLE_ID                            |
@@ -198,7 +196,6 @@ Every field is the literal file name of an embedded resource.
 | @user-module | jam_pdf               | Clean-room PDF document model, writer and graphics context                                       |
 | @user-module | jam_data_structures   | ValueTree management and data model utilities — model, parameters, JSON conversion               |
 | @user-module | jam_animation         | Foundation animation classes (Animator, AnimationBase, AnimationScrollingText)                   |
-| @user-module | jam_vulkan            | Vulkan rendering backend                                                                         |
 | @user-module | jam_web               | HTML authored-subset and CSS Syntax Level 3 subset tokenizers and parsers                        |
 | @user-module | jam_style             | JAM Style — LookAndFeel base + ColourScheme-backed colour registry                               |
 | @user-module | jam_gui               | GUI foundation — Window, Modal, Glass                                                            |
@@ -227,7 +224,6 @@ Every field is the literal file name of an embedded resource.
 | juceStrictRefCountedPointer        | JUCE_STRICT_REFCOUNTEDPOINTER=1                                      | Strict ReferenceCountedObjectPtr casting                      |
 | juceWebBrowser                     | JUCE_WEB_BROWSER=0                                                   | WebBrowserComponent support                                   |
 | juceUseCurl                        | JUCE_USE_CURL=0                                                      | libcurl for http on Linux                                     |
-| vmaVulkanVersion                   | VMA_VULKAN_VERSION=1002000                                           | Vulkan version for Vulkan Memory Allocator                    |
 | debug                              | `$<$<CONFIG:Debug>:DEBUG=1>`                                         | Debug configuration                                           |
 | ndebug                             | `$<$<CONFIG:Release>:NDEBUG=1>`                                      | Release configuration                                         |
 | win32LeanAndMean                   | `$<$<PLATFORM_ID:Windows>:WIN32_LEAN_AND_MEAN=1>`                    | Exclude rarely used Windows headers                           |

@@ -80,7 +80,6 @@ endif()
 
 set(CAST_JUCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../JUCE")
 set(CAST_USER_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../jam")
-set(CAST_VULKAN_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../Vulkan")
 
 set(CAST_JUCE_VERSION 8.0.14)
 
@@ -91,7 +90,10 @@ set(CAST_JUCE_PATCHES
 "${CAST_USER_MODULE_PATH}/patch/juce-direct2d-helpers-visibility-hook.patch"# Direct2D helpers visibility gate
 "${CAST_USER_MODULE_PATH}/patch/juce-image-subsection-hook.patch"           # Root image and subsection bounds hooks
 "${CAST_USER_MODULE_PATH}/patch/juce-vulkan-engine-hook.patch"              # External graphics context factory for Vulkan
-"${CAST_USER_MODULE_PATH}/patch/juce-paint-update-rect-hook.patch"          # OS dirty rectangle before native paint
+"${CAST_USER_MODULE_PATH}/patch/juce-paint-update-rect-hook.patch"          # OS dirty rectangle before native paint; applies after juce-vulkan-engine-hook.patch
+"${CAST_USER_MODULE_PATH}/patch/juce-attributed-text-hook.patch"            # Attributed text virtual on LowLevelGraphicsContext; applies after juce-vulkan-engine-hook.patch
+"${CAST_USER_MODULE_PATH}/patch/juce-adhoc-sign-hook.patch"                 # No ad-hoc signature on the VST3 bundle
+"${CAST_USER_MODULE_PATH}/patch/juce-display-changed-hook.patch"            # Callback after refresh() finds a display change
 )
 
 if(WIN32)
@@ -120,6 +122,8 @@ if(NOT EXISTS "${CAST_JUCE_PATCH_STAMP_FILE}")
     if(EXISTS "${CAST_PATCHED_JUCE_PATH}")
         file(REMOVE_RECURSE "${CAST_PATCHED_JUCE_PATH}")
     endif()
+
+    file(REAL_PATH "${CAST_JUCE_PATH}" CAST_JUCE_PATH)
 
     file(COPY "${CAST_JUCE_PATH}/"
         DESTINATION "${CAST_PATCHED_JUCE_PATH}"
@@ -184,7 +188,6 @@ juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_graphics")         # Gra
 juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_pdf")              # Clean-room PDF document model, writer and graphics context
 juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_data_structures")  # ValueTree management and data model utilities — model, parameters, JSON conversion
 juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_animation")        # Foundation animation classes (Animator, AnimationBase, AnimationScrollingText)
-juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_vulkan")           # Vulkan rendering backend
 juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_web")              # HTML authored-subset and CSS Syntax Level 3 subset tokenizers and parsers
 juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_style")            # JAM Style — LookAndFeel base + ColourScheme-backed colour registry
 juce_add_module("${CMAKE_CURRENT_SOURCE_DIR}/../jam/jam_gui")              # GUI foundation — Window, Modal, Glass
@@ -227,7 +230,6 @@ JUCE_DONT_DECLARE_PROJECTINFO=1
 JUCE_STRICT_REFCOUNTEDPOINTER=1
 JUCE_WEB_BROWSER=0
 JUCE_USE_CURL=0
-VMA_VULKAN_VERSION=1002000
 "$<$<CONFIG:Debug>:DEBUG=1>"
 "$<$<CONFIG:Release>:NDEBUG=1>"
 "$<$<PLATFORM_ID:Windows>:WIN32_LEAN_AND_MEAN=1>"
@@ -247,12 +249,6 @@ ${CMAKE_CURRENT_SOURCE_DIR}/Source/generated
 "${CAST_JUCE_PATH}/modules/juce_graphics/fonts/harfbuzz"
 )
 
-if(APPLE)
-    target_include_directories(${PROJECT_NAME} BEFORE PRIVATE "${CAST_VULKAN_PATH}/macOS/include")
-elseif(WIN32)
-    target_include_directories(${PROJECT_NAME} BEFORE PRIVATE "${CAST_VULKAN_PATH}/Include")
-endif()
-
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
 juce_core
@@ -264,7 +260,6 @@ jam_graphics
 jam_pdf
 jam_data_structures
 jam_animation
-jam_vulkan
 jam_web
 jam_style
 jam_gui
@@ -276,21 +271,8 @@ jam_markdown_graphics
         juce::juce_recommended_config_flags
 )
 
-if(APPLE)
-    add_library(moltenVK STATIC IMPORTED GLOBAL)
-    set_target_properties(moltenVK PROPERTIES
-        IMPORTED_LOCATION
-            "${CAST_VULKAN_PATH}/macOS/lib/MoltenVK.xcframework/macos-arm64_x86_64/libMoltenVK.a"
-        INTERFACE_INCLUDE_DIRECTORIES
-            "${CAST_VULKAN_PATH}/macOS/include"
-    )
-    target_link_libraries(${PROJECT_NAME} PRIVATE moltenVK "-framework IOKit" "-framework IOSurface")
-elseif(WIN32)
-    find_library(CAST_VULKAN_LOADER_LIB vulkan-1
-        PATHS "${CAST_VULKAN_PATH}/Lib"
-        NO_DEFAULT_PATH
-        REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PRIVATE "${CAST_VULKAN_LOADER_LIB}" dwmapi.lib user32.lib)
+if(WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dwmapi.lib user32.lib)
 endif()
 
 if(MSVC)
@@ -304,11 +286,6 @@ else()
         "${CAST_USER_MODULE_PATH}/jam_freetype/jam_freetype.mm"
         PROPERTIES COMPILE_FLAGS "-Wno-macro-redefined"
     )
-    set_source_files_properties(
-        "${CAST_USER_MODULE_PATH}/jam_vulkan/jam_vulkan.cpp"
-        "${CAST_USER_MODULE_PATH}/jam_vulkan/jam_vulkan.mm"
-        PROPERTIES COMPILE_FLAGS "-Wno-nullability-completeness -Wno-nullability-extension -fno-strict-aliasing"
-    )
 endif()
 
 target_compile_options(${PROJECT_NAME} PRIVATE
@@ -319,55 +296,6 @@ target_compile_options(${PROJECT_NAME} PRIVATE
 target_link_options(${PROJECT_NAME} PRIVATE
     $<$<CONFIG:Release>:${CAST_RELEASE_LINK_FLAGS}>
 )
-
-if(APPLE)
-    set(CAST_VULKAN_GLSLC "${CAST_VULKAN_PATH}/macOS/bin/glslc")
-elseif(WIN32)
-    set(CAST_VULKAN_GLSLC "${CAST_VULKAN_PATH}/Bin/glslc.exe")
-endif()
-
-if(NOT EXISTS "${CAST_VULKAN_GLSLC}")
-    message(FATAL_ERROR "CAST: glslc not found at ${CAST_VULKAN_GLSLC}")
-endif()
-
-set(CAST_SHADER_INCLUDE_DIR "${CAST_USER_MODULE_PATH}/resources/shaders")
-
-file(GLOB_RECURSE CAST_SHADER_SOURCES CONFIGURE_DEPENDS
-    "${CAST_USER_MODULE_PATH}/resources/shaders/*.vert"
-    "${CAST_USER_MODULE_PATH}/resources/shaders/*.frag"
-    "${CAST_USER_MODULE_PATH}/resources/shaders/*.comp"
-)
-
-foreach(CAST_SHADER_SOURCE ${CAST_SHADER_SOURCES})
-    get_filename_component(CAST_SHADER_NAME "${CAST_SHADER_SOURCE}" NAME)
-    set(CAST_SHADER_SPV "${CAST_USER_MODULE_PATH}/resources/spv/${CAST_SHADER_NAME}.spv")
-    set(CAST_SHADER_DEPFILE "${CAST_SHADER_SPV}.d")
-    list(APPEND CAST_SHADER_SPV_OUTPUTS "${CAST_SHADER_SPV}")
-    add_custom_command(
-        OUTPUT  "${CAST_SHADER_SPV}"
-        COMMAND "${CAST_VULKAN_GLSLC}"
-                -I "${CAST_SHADER_INCLUDE_DIR}"
-                -MD -MF "${CAST_SHADER_DEPFILE}"
-                "${CAST_SHADER_SOURCE}" -o "${CAST_SHADER_SPV}"
-        DEPENDS "${CAST_SHADER_SOURCE}"
-        DEPFILE "${CAST_SHADER_DEPFILE}"
-        COMMENT "glslc: ${CAST_SHADER_NAME} -> spv"
-        VERBATIM
-    )
-endforeach()
-
-file(GLOB CAST_SHADER_SPV_FILES CONFIGURE_DEPENDS "${CAST_USER_MODULE_PATH}/resources/spv/*.spv")
-list(APPEND CAST_SHADER_SPV_FILES ${CAST_SHADER_SPV_OUTPUTS})
-list(REMOVE_DUPLICATES CAST_SHADER_SPV_FILES)
-
-if(CAST_SHADER_SPV_FILES)
-    juce_add_binary_data(jam_vulkan_ShaderData
-        NAMESPACE   "jam"
-        HEADER_NAME "jam_VulkanShaderData.h"
-        SOURCES     ${CAST_SHADER_SPV_FILES}
-    )
-    target_link_libraries(${PROJECT_NAME} PRIVATE jam_vulkan_ShaderData)
-endif()
 
 file(GLOB CAST_BINARY_FILES CONFIGURE_DEPENDS
 Source/HELP.md

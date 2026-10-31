@@ -190,26 +190,23 @@ static void addPages (jam::PdfDocument& document,
 static bool writeDocument (const juce::File& inputFile, const juce::File& outputFile)
 {
     static const juce::Identifier css { Extensions::css };
-    static constexpr bool gpuDisabled { false };
-    const juce::File noCacheFile;
 
-    jam::VulkanEngine::getOrCreate (
-        jam::VulkanEngine::getPrimaryDisplayExtent(), ProjectInfo::projectName, jam::VulkanEngine::getFrameBudget(), noCacheFile, gpuDisabled);
+    jam::CpuGraphicsEngine::getOrCreate();
 
     jam::SharedInstance<jam::SharedDocuments> documents { std::in_place };
     auto markdown { jam::MarkdownDocument::parse (inputFile.loadFileAsString(), inputFile.getFullPathName()) };
     const auto properties (markdown.getProperties());
-    juce::ValueTree config { Id::toType (Id::config) };
+    juce::Array<juce::ValueTree> sheetTrees;
 
-    jam::Css::getOrCreate (juce::Identifier { files::pageStyleSheet }).applyTo (config, Id::markdown);
+    sheetTrees.add (jam::Css::getOrCreate (juce::Identifier { files::pageStyleSheet }).getValueTree (Id::toType (Id::config), Id::markdown));
 
     for (const auto& styleSheet : { files::markdownStyleSheet, files::mermaidStyleSheet })
-        jam::Css::getOrCreate (juce::Identifier { styleSheet }).applyTo (config, juce::Identifier { juce::File::createFileWithoutCheckingPath (styleSheet).getFileNameWithoutExtension() });
+        sheetTrees.add (jam::Css::getOrCreate (juce::Identifier { styleSheet }).getValueTree (Id::toType (Id::config), juce::Identifier { juce::File::createFileWithoutCheckingPath (styleSheet).getFileNameWithoutExtension() }));
 
     if (properties.contains (css))
-        jam::Css::parse (inputFile.getSiblingFile (properties[css].toString()).loadFileAsString()).applyTo (config, Id::markdown);
+        sheetTrees.add (jam::Css::parse (inputFile.getSiblingFile (properties[css].toString()).loadFileAsString()).getValueTree (Id::toType (Id::config), Id::markdown));
 
-    jam::StyleManager styleManager { { BinaryData::fetcher }, config };
+    jam::StyleManager styleManager { { BinaryData::fetcher }, jam::Css::getValueTree (Id::toType (Id::config), sheetTrees) };
     jam::StyleMarkdown styleMarkdown;
     juce::LookAndFeel::setDefaultLookAndFeel (&styleMarkdown);
 
