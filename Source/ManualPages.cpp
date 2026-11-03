@@ -38,7 +38,7 @@ static jam::Array<int> getChapterStarts (const jam::Document::Element& root,
     for (const auto* block : root)
         if (block->contains (Id::type) and *block->get<int> (Id::type) == map::BlockType::heading)
         {
-            const auto text { elementStyle.getChildWithName (Id::toType (block->id)).getProperty (Id::breakBefore, Id::none.toString()).toString() };
+            const auto text { elementStyle.getChildWithName (jam::Format::toType (block->id)).getProperty (Id::breakBefore, Id::none.toString()).toString() };
 
             if (juce::Identifier { text } == Id::page)
                 rows.add (body.getRowNumber (*block));
@@ -56,7 +56,7 @@ static juce::String getHeadingString (const juce::Identifier& tag,
 
     for (const auto* heading : headings)
     {
-        if (Id::toType (heading->id) == tag)
+        if (jam::Format::toType (heading->id) == tag)
         {
             const auto row { body.getRowNumber (*heading) };
 
@@ -150,7 +150,7 @@ juce::NamedValueSet getPageStrings (const juce::NamedValueSet& properties,
         {
             const juce::Identifier name { record.getProperty (Id::stringSet).toString() };
 
-            if (record.getType() == Id::toType (Id::title))
+            if (record.getType() == jam::Format::toType (Id::title))
                 strings.set (name, properties[Id::title]);
             else
                 strings.set (name, getHeadingString (record.getType(), headings, body, rows));
@@ -170,8 +170,8 @@ void paintMarginBoxes (juce::Graphics& g,
 {
     for (const auto& [index, name] : map::MarginBoxType::getInstance()->get())
     {
-        const auto base { pageStyle.getChildWithName (Id::toType (juce::Identifier { name })) };
-        const auto specific { pageStyle.getChildWithName (Id::toType (pageType)).getChildWithName (Id::toType (juce::Identifier { name })) };
+        const auto base { pageStyle.getChildWithName (jam::Format::toType (juce::Identifier { name })) };
+        const auto specific { pageStyle.getChildWithName (jam::Format::toType (pageType)).getChildWithName (jam::Format::toType (juce::Identifier { name })) };
         const auto box { specific.hasProperty (Id::content) ? specific : base };
         const auto area { map::bottomMarginBoxes[index] ? page.reduced (margin, 0.0f).withTop (page.getHeight() - margin) : page.reduced (margin, 0.0f).withHeight (margin) };
         auto text { getBoxText (box, pageNumber, strings) };
