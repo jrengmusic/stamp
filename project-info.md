@@ -9,13 +9,10 @@
 | @juce-path         | ${CMAKE_CURRENT_SOURCE_DIR}/../../JUCE                                 |
 | @user-module       | ${CMAKE_CURRENT_SOURCE_DIR}/../jam                                     |
 | @source            | ${CMAKE_CURRENT_SOURCE_DIR}/Source                                     |
-| @mermaid-style     | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/mermaid.css               |
 | @generated         | ${CMAKE_CURRENT_SOURCE_DIR}/Source/generated                           |
-| @markdown-style    | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/markdown.css              |
-| @display-book      | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayBook.ttf     |
-| @display-bold      | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayBold.ttf     |
-| @display-mono-book | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayMonoBook.ttf |
-| @display-mono-bold | ${CMAKE_CURRENT_SOURCE_DIR}/../jam/resources/fonts/DisplayMonoBold.ttf |
+| @display-book      | ${CMAKE_CURRENT_SOURCE_DIR}/Source/fonts/DisplayBook.ttf               |
+| @display-bold      | ${CMAKE_CURRENT_SOURCE_DIR}/Source/fonts/DisplayBold.ttf               |
+| @display-mono-book | ${CMAKE_CURRENT_SOURCE_DIR}/Source/fonts/DisplayMonoBook.ttf           |
 +--------------------+------------------------------------------------------------------------+
 
 ## project info
@@ -254,12 +251,10 @@ Every field is the literal file name of an embedded resource.
 +====================+====================+=================================================+
 | help               | Source/HELP.md     | Help document source                            |
 | pageStyleSheet     | Source/page.css    | Page stylesheet, embedded as BinaryData         |
-| mermaidStyleSheet  | @mermaid-style     | Mermaid stylesheet, embedded as BinaryData      |
-| markdownStyleSheet | @markdown-style    | Markdown stylesheet, embedded as BinaryData     |
+| styleSheet         | Source/style.css   | Stylesheet, embedded as BinaryData              |
 | displayBook        | @display-book      | Markdown body font, embedded as BinaryData      |
 | displayBold        | @display-bold      | Markdown bold font, embedded as BinaryData      |
 | displayMonoBook    | @display-mono-book | Markdown mono font, embedded as BinaryData      |
-| displayMonoBold    | @display-mono-bold | Markdown mono bold font, embedded as BinaryData |
 +--------------------+--------------------+-------------------------------------------------+
 
 ## toolchain

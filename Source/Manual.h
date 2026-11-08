@@ -49,7 +49,7 @@ juce::String getContentsText (const juce::NamedValueSet& properties,
  */
 jam::HashMap<juce::String, jam::Array<int>> getTermPages (const juce::NamedValueSet& properties,
                                                           const jam::Document::Element& root,
-                                                          const jam::MarkdownComponent& body,
+                                                          const jam::TextEditor& body,
                                                           const jam::HashMap<int, int>& rowPages);
 
 /**
@@ -76,7 +76,7 @@ juce::String getIndexText (const jam::HashMap<juce::String, jam::Array<int>>& te
  * @return The half-open row range of each chapter.
  */
 jam::Array<juce::Range<int>> getChapterRows (const jam::Document::Element& root,
-                                             const jam::MarkdownComponent& body,
+                                             const jam::TextEditor& body,
                                              const juce::ValueTree& elementStyle);
 
 /**
@@ -96,7 +96,7 @@ jam::Array<juce::Range<int>> getChapterRows (const jam::Document::Element& root,
  */
 juce::NamedValueSet getPageStrings (const juce::NamedValueSet& properties,
                                     const jam::Array<const jam::Document::Element*>& headings,
-                                    const jam::MarkdownComponent& body,
+                                    const jam::TextEditor& body,
                                     const juce::ValueTree& elementStyle,
                                     juce::Range<int> rows);
 

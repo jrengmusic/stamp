@@ -6,21 +6,14 @@ namespace manual
 {
 static juce::var getBoxProperty (const juce::ValueTree& specific,
                                  const juce::ValueTree& base,
-                                 const juce::Identifier& key)
-{
-    return specific.getProperty (key, base.getProperty (key));
-}
-
-static juce::var getBoxProperty (const juce::ValueTree& specific,
-                                 const juce::ValueTree& base,
                                  const juce::Identifier& key,
-                                 const juce::var& defaultValue)
+                                 const juce::var& defaultValue = {})
 {
     return specific.getProperty (key, base.getProperty (key, defaultValue));
 }
 
 static jam::Array<int> getChapterStarts (const jam::Document::Element& root,
-                                         const jam::MarkdownComponent& body,
+                                         const jam::TextEditor& body,
                                          const juce::ValueTree& elementStyle)
 {
     jam::Array<int> rows;
@@ -49,7 +42,7 @@ static jam::Array<int> getChapterStarts (const jam::Document::Element& root,
 
 static juce::String getHeadingString (const juce::Identifier& tag,
                                       const jam::Array<const jam::Document::Element*>& headings,
-                                      const jam::MarkdownComponent& body,
+                                      const jam::TextEditor& body,
                                       juce::Range<int> rows)
 {
     juce::String text;
@@ -117,7 +110,7 @@ static void paintBoxBorder (juce::Graphics& g,
 }
 
 jam::Array<juce::Range<int>> getChapterRows (const jam::Document::Element& root,
-                                             const jam::MarkdownComponent& body,
+                                             const jam::TextEditor& body,
                                              const juce::ValueTree& elementStyle)
 {
     auto rows (getChapterStarts (root, body, elementStyle));
@@ -138,7 +131,7 @@ jam::Array<juce::Range<int>> getChapterRows (const jam::Document::Element& root,
 
 juce::NamedValueSet getPageStrings (const juce::NamedValueSet& properties,
                                     const jam::Array<const jam::Document::Element*>& headings,
-                                    const jam::MarkdownComponent& body,
+                                    const jam::TextEditor& body,
                                     const juce::ValueTree& elementStyle,
                                     juce::Range<int> rows)
 {

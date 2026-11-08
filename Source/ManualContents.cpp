@@ -77,7 +77,7 @@ juce::String getContentsText (const juce::NamedValueSet& properties,
 
 jam::HashMap<juce::String, jam::Array<int>> getTermPages (const juce::NamedValueSet& properties,
                                                           const jam::Document::Element& root,
-                                                          const jam::MarkdownComponent& body,
+                                                          const jam::TextEditor& body,
                                                           const jam::HashMap<int, int>& rowPages)
 {
     jam::HashMap<juce::String, jam::Array<int>> termPages;

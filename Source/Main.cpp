@@ -8,9 +8,9 @@ static void printUsage()
     std::cout << BinaryData::getString (juce::String { files::help }) << std::endl;
 }
 
-static std::unique_ptr<jam::MarkdownComponent> getComponent (jam::MarkdownDocument&& markdown, juce::Rectangle<float> content)
+static std::unique_ptr<jam::TextEditor> getComponent (jam::MarkdownDocument&& markdown, juce::Rectangle<float> content)
 {
-    auto component { std::make_unique<jam::MarkdownComponent>() };
+    auto component { std::make_unique<jam::TextEditor>() };
 
     component->setScrollBarsShown (false, false);
     component->setSize (static_cast<int> (content.getWidth()), static_cast<int> (content.getHeight()));
@@ -19,7 +19,7 @@ static std::unique_ptr<jam::MarkdownComponent> getComponent (jam::MarkdownDocume
     return component;
 }
 
-static std::unique_ptr<jam::MarkdownComponent> getComponent (const juce::String& text, const juce::File& inputFile, juce::Rectangle<float> content)
+static std::unique_ptr<jam::TextEditor> getComponent (const juce::String& text, const juce::File& inputFile, juce::Rectangle<float> content)
 {
     return getComponent (jam::MarkdownDocument::parse (text, inputFile.getFullPathName()), content);
 }
@@ -31,12 +31,12 @@ static juce::Rectangle<float> getPageArea (const juce::ValueTree& pageStyle)
     return { static_cast<float> (map::pageWidths[page]), static_cast<float> (map::pageHeights[page]) };
 }
 
-static jam::Array<juce::Range<int>> getSectionPages (const jam::MarkdownComponent& component, float contentHeight)
+static jam::Array<juce::Range<int>> getSectionPages (const jam::TextEditor& component, float contentHeight)
 {
     return component.getPageRows (contentHeight, { 0, component.getNumRows() });
 }
 
-static jam::Array<juce::Range<int>> getBodyPages (const jam::MarkdownComponent& body,
+static jam::Array<juce::Range<int>> getBodyPages (const jam::TextEditor& body,
                                                   const jam::Array<juce::Range<int>>& chapters,
                                                   const jam::Array<const jam::Document::Element*>& headings,
                                                   float contentHeight,
@@ -77,7 +77,7 @@ static jam::HashMap<int, int> getRowPages (const jam::Array<juce::Range<int>>& p
     return rowPages;
 }
 
-static jam::HashMap<const jam::Document::Element*, int> getPageNumbers (const jam::MarkdownComponent& body,
+static jam::HashMap<const jam::Document::Element*, int> getPageNumbers (const jam::TextEditor& body,
                                                                         const jam::Array<const jam::Document::Element*>& headings,
                                                                         const jam::HashMap<int, int>& rowPages)
 {
@@ -94,9 +94,9 @@ static jam::HashMap<const jam::Document::Element*, int> getPageNumbers (const ja
     return pageNumbers;
 }
 
-static std::unique_ptr<jam::MarkdownComponent> getContents (const juce::NamedValueSet& properties,
+static std::unique_ptr<jam::TextEditor> getContents (const juce::NamedValueSet& properties,
                                                             const jam::Array<const jam::Document::Element*>& headings,
-                                                            const jam::MarkdownComponent& body,
+                                                            const jam::TextEditor& body,
                                                             const jam::Array<juce::Range<int>>& bodyPages,
                                                             int pageIndex,
                                                             const juce::File& inputFile,
@@ -126,7 +126,7 @@ static const juce::Identifier& getElementSheet()
 }
 
 static int addSectionPages (jam::PdfDocument& document,
-                            jam::MarkdownComponent& component,
+                            jam::TextEditor& component,
                             const jam::Array<juce::Range<int>>& pages,
                             const juce::Identifier& pageType,
                             const juce::NamedValueSet& properties,
@@ -200,8 +200,7 @@ static bool writeDocument (const juce::File& inputFile, const juce::File& output
 
     sheetTrees.add (jam::Css::getOrCreate (juce::Identifier { files::pageStyleSheet }).getValueTree (jam::Format::toType (Id::config), Id::markdown));
 
-    for (const auto& styleSheet : { files::markdownStyleSheet, files::mermaidStyleSheet })
-        sheetTrees.add (jam::Css::getOrCreate (juce::Identifier { styleSheet }).getValueTree (jam::Format::toType (Id::config), juce::Identifier { juce::File::createFileWithoutCheckingPath (styleSheet).getFileNameWithoutExtension() }));
+    sheetTrees.add (jam::Css::getValueTree (jam::Format::toType (Id::config), jam::Strings { files::styleSheet }));
 
     if (properties.contains (css))
         sheetTrees.add (jam::Css::parse (inputFile.getSiblingFile (properties[css].toString()).loadFileAsString()).getValueTree (jam::Format::toType (Id::config), Id::markdown));
@@ -232,15 +231,15 @@ int main (int argc, char* argv[])
     jam::SharedInstance<map::PageType> pageType { std::in_place };
     jam::SharedInstance<map::MarginBoxType> box { std::in_place };
     const juce::ArgumentList arguments { argc, argv };
-    auto exitCode { EXIT_FAILURE };
 
     if (arguments.size() == argumentCount)
-        exitCode = juce::ConsoleApplication::invokeCatchingFailures ([&arguments]
+    {
+        return juce::ConsoleApplication::invokeCatchingFailures ([&arguments]
         {
             return writeDocument (arguments) ? EXIT_SUCCESS : EXIT_FAILURE;
         });
-    else
-        printUsage();
+    }
 
-    return exitCode;
+    printUsage();
+    return EXIT_FAILURE;
 }
