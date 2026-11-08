@@ -2,10 +2,11 @@
 #include <Files.h>
 #include <Page.h>
 #include "Manual.h"
+#include "Help.h"
 
 static void printUsage()
 {
-    std::cout << BinaryData::getString (juce::String { files::help }) << std::endl;
+    printHelp (BinaryData::getString (juce::String { files::help }));
 }
 
 static std::unique_ptr<jam::TextEditor> getComponent (jam::MarkdownDocument&& markdown, juce::Rectangle<float> content)

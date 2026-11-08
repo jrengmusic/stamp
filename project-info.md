@@ -2,18 +2,18 @@
 
 ## index
 
-+--------------------+------------------------------------------------------------------------+
-| alias              | symbol                                                                 |
-+====================+========================================================================+
-| @char              | const char* const                                                      |
-| @juce-path         | ${CMAKE_CURRENT_SOURCE_DIR}/../../JUCE                                 |
-| @user-module       | ${CMAKE_CURRENT_SOURCE_DIR}/../jam                                     |
-| @source            | ${CMAKE_CURRENT_SOURCE_DIR}/Source                                     |
-| @generated         | ${CMAKE_CURRENT_SOURCE_DIR}/Source/generated                           |
-| @display-book      | ${CMAKE_CURRENT_SOURCE_DIR}/Source/fonts/DisplayBook.ttf               |
-| @display-bold      | ${CMAKE_CURRENT_SOURCE_DIR}/Source/fonts/DisplayBold.ttf               |
-| @display-mono-book | ${CMAKE_CURRENT_SOURCE_DIR}/Source/fonts/DisplayMonoBook.ttf           |
-+--------------------+------------------------------------------------------------------------+
++--------------------+--------------------------------------------------------------+
+| alias              | symbol                                                       |
++====================+==============================================================+
+| @char              | const char* const                                            |
+| @juce-path         | ${CMAKE_CURRENT_SOURCE_DIR}/../../JUCE                       |
+| @user-module       | ${CMAKE_CURRENT_SOURCE_DIR}/../jam                           |
+| @source            | ${CMAKE_CURRENT_SOURCE_DIR}/Source                           |
+| @generated         | ${CMAKE_CURRENT_SOURCE_DIR}/Source/generated                 |
+| @display-book      | ${CMAKE_CURRENT_SOURCE_DIR}/Source/fonts/DisplayBook.ttf     |
+| @display-bold      | ${CMAKE_CURRENT_SOURCE_DIR}/Source/fonts/DisplayBold.ttf     |
+| @display-mono-book | ${CMAKE_CURRENT_SOURCE_DIR}/Source/fonts/DisplayMonoBook.ttf |
++--------------------+--------------------------------------------------------------+
 
 ## project info
 
@@ -200,6 +200,7 @@ Every field is the literal file name of an embedded resource.
 | @user-module | jam_markdown          | Clean-room native CommonMark + GFM markdown parsing and rendering                                |
 | @user-module | jam_mermaid_diagram   | Clean-room native mermaid diagram parsing over jam::Document producing the semantic Element tree |
 | @user-module | jam_markdown_graphics | Markdown and mermaid materialisation, layout and view component                                  |
+| @user-module | jam_terminal          | VT read-side engine, TTY, protocol vocabulary, keyboard encoding                                 |
 +--------------+-----------------------+--------------------------------------------------------------------------------------------------+
 
 ## source glob
@@ -246,16 +247,16 @@ Every field is the literal file name of an embedded resource.
 
 ## binary
 
-+--------------------+--------------------+-------------------------------------------------+
-| name               | value              | description                                     |
-+====================+====================+=================================================+
-| help               | Source/HELP.md     | Help document source                            |
-| pageStyleSheet     | Source/page.css    | Page stylesheet, embedded as BinaryData         |
-| styleSheet         | Source/style.css   | Stylesheet, embedded as BinaryData              |
-| displayBook        | @display-book      | Markdown body font, embedded as BinaryData      |
-| displayBold        | @display-bold      | Markdown bold font, embedded as BinaryData      |
-| displayMonoBook    | @display-mono-book | Markdown mono font, embedded as BinaryData      |
-+--------------------+--------------------+-------------------------------------------------+
++-----------------+--------------------+--------------------------------------------+
+| name            | value              | description                                |
++=================+====================+============================================+
+| help            | Source/HELP.md     | Help document source                       |
+| pageStyleSheet  | Source/page.css    | Page stylesheet, embedded as BinaryData    |
+| styleSheet      | Source/style.css   | Stylesheet, embedded as BinaryData         |
+| displayBook     | @display-book      | Markdown body font, embedded as BinaryData |
+| displayBold     | @display-bold      | Markdown bold font, embedded as BinaryData |
+| displayMonoBook | @display-mono-book | Markdown mono font, embedded as BinaryData |
++-----------------+--------------------+--------------------------------------------+
 
 ## toolchain
 
