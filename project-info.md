@@ -116,7 +116,7 @@ Every field is the literal file name of an embedded resource.
 +-----------------------------+-----------------------------------------------+-------------------------------------------+
 | juceTargetFunction          | juce_add_console_app                          | JUCE target-creation function             |
 +-----------------------------+-----------------------------------------------+-------------------------------------------+
-| juceVersion                 | 8.0.14                                        | Required JUCE version, exact              |
+| juceVersion                 | 8.0.17                                        | Required JUCE version, exact              |
 +-----------------------------+-----------------------------------------------+-------------------------------------------+
 | cxxStandard                 | 17                                            | C++ language standard                     |
 +-----------------------------+-----------------------------------------------+-------------------------------------------+
@@ -191,7 +191,7 @@ Every field is the literal file name of an embedded resource.
 | @user-module | jam_freetype          | Vendored FreeType font rasterization library                                                     |
 | @user-module | jam_graphics          | Graphics utilities, blur, shadows, colours, fonts, mesh                                          |
 | @user-module | jam_pdf               | Clean-room PDF document model, writer and graphics context                                       |
-| @user-module | jam_data_structures   | ValueTree management and data model utilities — model, parameters, JSON conversion               |
+| @user-module | jam_data_structures   | ValueTree management and data model utilities — model, parameters                                |
 | @user-module | jam_animation         | Foundation animation classes (Animator, AnimationBase, AnimationScrollingText)                   |
 | @user-module | jam_web               | HTML authored-subset and CSS Syntax Level 3 subset tokenizers and parsers                        |
 | @user-module | jam_style             | JAM Style — LookAndFeel base + ColourScheme-backed colour registry                               |

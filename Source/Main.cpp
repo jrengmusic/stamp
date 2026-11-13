@@ -22,7 +22,7 @@ static std::unique_ptr<jam::TextEditor> getComponent (jam::MarkdownDocument&& ma
 
 static std::unique_ptr<jam::TextEditor> getComponent (const juce::String& text, const juce::File& inputFile, juce::Rectangle<float> content)
 {
-    return getComponent (jam::MarkdownDocument::parse (text, inputFile.getFullPathName()), content);
+    return getComponent (std::move (*jam::MarkdownDocument::parse (text, inputFile.getFullPathName())), content);
 }
 
 static juce::Rectangle<float> getPageArea (const juce::ValueTree& pageStyle)
@@ -195,25 +195,30 @@ static bool writeDocument (const juce::File& inputFile, const juce::File& output
     jam::CpuGraphicsEngine::getOrCreate();
 
     jam::SharedInstance<jam::SharedDocuments> documents { std::in_place };
-    auto markdown { jam::MarkdownDocument::parse (inputFile.loadFileAsString(), inputFile.getFullPathName()) };
-    const auto properties (markdown.getProperties());
-    juce::Array<juce::ValueTree> sheetTrees;
 
-    sheetTrees.add (jam::Css::getOrCreate (juce::Identifier { files::pageStyleSheet }).getValueTree (jam::Format::toType (Id::config), Id::markdown));
+    if (auto markdown { jam::MarkdownDocument::parse (inputFile.loadFileAsString(), inputFile.getFullPathName()) }; markdown != nullptr)
+    {
+        const auto properties (markdown->getProperties());
+        juce::Array<juce::ValueTree> sheetTrees;
 
-    sheetTrees.add (jam::Css::getValueTree (jam::Format::toType (Id::config), jam::Strings { files::styleSheet }));
+        sheetTrees.add (jam::Css::getOrCreate (juce::Identifier { files::pageStyleSheet })->getValueTree (jam::Format::toType (Id::config), Id::markdown));
 
-    if (properties.contains (css))
-        sheetTrees.add (jam::Css::parse (inputFile.getSiblingFile (properties[css].toString()).loadFileAsString()).getValueTree (jam::Format::toType (Id::config), Id::markdown));
+        sheetTrees.add (jam::Css::getValueTree (jam::Format::toType (Id::config), jam::Strings { files::styleSheet }));
 
-    jam::StyleManager styleManager { { BinaryData::fetcher }, jam::Css::getValueTree (jam::Format::toType (Id::config), sheetTrees) };
-    jam::StyleMarkdown styleMarkdown;
-    juce::LookAndFeel::setDefaultLookAndFeel (&styleMarkdown);
+        if (properties.contains (css))
+            sheetTrees.add (jam::Css::parse (inputFile.getSiblingFile (properties[css].toString()).loadFileAsString())->getValueTree (jam::Format::toType (Id::config), Id::markdown));
 
-    jam::PdfDocument document;
-    addPages (document, std::move (markdown), properties, inputFile);
+        jam::StyleManager styleManager { { BinaryData::fetcher }, jam::Css::getValueTree (jam::Format::toType (Id::config), sheetTrees) };
+        jam::StyleMarkdown styleMarkdown;
+        juce::LookAndFeel::setDefaultLookAndFeel (&styleMarkdown);
 
-    return jam::PdfWriter {}.toFile (document, outputFile);
+        jam::PdfDocument document;
+        addPages (document, std::move (*markdown), properties, inputFile);
+
+        return jam::PdfWriter {}.toFile (document, outputFile);
+    }
+
+    return false;
 }
 
 static bool writeDocument (const juce::ArgumentList& arguments)

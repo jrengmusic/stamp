@@ -71,12 +71,12 @@ static juce::String getBoxText (const juce::ValueTree& box,
     static const auto contentText {
         []
         {
-            jam::Function::Map<juce::Identifier, juce::String> contentText;
+            jam::Function::Map<juce::Identifier, jam::Function::pointerCapacity, juce::String (const juce::var&, int, const juce::NamedValueSet&)> contentText;
 
-            contentText.add<const juce::var&, int&, const juce::NamedValueSet&> (Id::string, [] (const juce::var& argument, int, const juce::NamedValueSet& strings)
-                                                                         { return strings[juce::Identifier { argument.toString() }].toString(); });
-            contentText.add<const juce::var&, int&, const juce::NamedValueSet&> (Id::counter, [] (const juce::var&, int number, const juce::NamedValueSet&)
-                                                                         { return juce::String (number); });
+            contentText.add (Id::string, [] (const juce::Identifier&, const juce::var& argument, int, const juce::NamedValueSet& strings)
+                             { return strings[juce::Identifier { argument.toString() }].toString(); });
+            contentText.add (Id::counter, [] (const juce::Identifier&, const juce::var&, int number, const juce::NamedValueSet&)
+                             { return juce::String (number); });
 
             return contentText;
         }()

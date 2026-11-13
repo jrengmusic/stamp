@@ -1,5 +1,33 @@
 # SPRINT-LOG
 
+## Sprint 8: Build Against the jam Document Contract; Function::Map Signature in the Type ✅
+
+**Date:** 2026-11-14
+**Duration:** part of one session. `jam/carol/SPRINT-LOG.md` Sprint 187 is the primary record.
+
+### Files Modified
+- `Source/Help.cpp:19`, `Source/Main.cpp:25` — `std::move (*jam::MarkdownDocument::parse (…))`, the cast form (`cast/Source/Help.cpp:19`).
+- `Source/Main.cpp:199-221` — `writeDocument` parses the input file once; an invalid file returns false (the form of `cast/Source/Sync.cpp:460-463`). `markdown->getProperties()`, `addPages (document, std::move (*markdown), …)`; `Css::getOrCreate (…)->getValueTree`, `Css::parse (…)->getValueTree`.
+- `Source/ManualPages.cpp:74-79` — `jam::Function::Map<juce::Identifier, jam::Function::pointerCapacity, juce::String (const juce::var&, int, const juce::NamedValueSet&)>`; each callable takes the key first; `add` has no explicit template argument (CODING.md "Uniform signature in the type"; sibling `jam_SettingsDocument.cpp:93-96`). The old two-argument form no longer compiled (`jam_Function.h:96`).
+- `project-info.md`, `CMakeLists.txt` — `juceVersion` 8.0.17, the `juce-plugin-window-size-hook.patch` row, the `jam_data_structures` description.
+
+### Alignment Check
+- [x] BLESSED principles followed
+- [x] NAMES.md adhered
+- [x] MANIFESTO.md principles applied
+
+### Problems Solved
+- stamp did not compile against the pointer-returning parse and the three-argument `Function::Map`. The release build exits 0; the pkg signed, notarised (`status: Accepted`) and stapled.
+
+### State for Continuation
+- The release run's toolchain may also run `gh.cmake` (release upload). No read confirms it.
+
+### Debts Paid
+- None
+
+### Debts Deferred
+- None
+
 ## Sprint 7: Build Against the jam Contract Audit; Page.h From cast; Margin-Box Justifications as Plain Cells ✅
 
 **Date:** 2026-10-14
